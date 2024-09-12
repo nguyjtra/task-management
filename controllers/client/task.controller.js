@@ -64,3 +64,74 @@ module.exports.detail = async (req, res) => {
     });
   }
 }
+
+module.exports.changeStatus=async(req,res)=>{
+  try{
+    const ids=req.body.ids;
+    const status=req.body.status
+    await Task.updateMany({
+      _id:{$in:ids}
+    },{
+      status:status
+    })
+    res.json({
+      message : "success"}
+    )
+  }
+  catch(error){
+    res.json({
+      message:"fail"
+    })
+  }
+}
+
+module.exports.create=async(req,res)=>{
+  try{
+  let newTask=new Task(req.body)
+  await newTask.save();
+  res.json({
+    message:"sucess",
+    task:newTask
+  })
+  }
+  catch(error){
+    res.json({
+      message:"fail"
+    })
+  }
+
+}
+
+module.exports.edit=async(req,res)=>{
+  try {
+    let id=req.params.id;
+    const data=req.body
+    await Task.updateOne({
+      _id:id
+    },req.body
+    )
+    res.json({
+      message:"success"
+    })
+
+  } catch (error) {
+    res.json({
+      message:"error"
+    })
+  }
+}
+
+module.exports.delete=async(req,res)=>{
+  try {
+    await Task.updateMany({
+      _id:{$in:req.body.ids}
+    },{
+      deleted:true
+    })
+    res.json({message:"success"})
+  } catch (error) {
+    res.json({message:"error"})
+  }
+  
+
+}
