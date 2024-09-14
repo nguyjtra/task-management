@@ -3,6 +3,10 @@ const Task = require("../../models/task.model");
 // [GET] /tasks
 module.exports.index = async (req, res) => {
   let find={
+    $or:[
+      {createdBy:req.user.id},
+      {listUser:req.user.id} 
+    ],
     deleted: false
   }
   //keyword
@@ -46,7 +50,6 @@ module.exports.index = async (req, res) => {
 
   res.json(tasks);
 }
-
 // [GET] /tasks/detail/:id
 module.exports.detail = async (req, res) => {
   try {
@@ -87,7 +90,9 @@ module.exports.changeStatus=async(req,res)=>{
 
 module.exports.create=async(req,res)=>{
   try{
+  req.body.createdBy=req.user.id
   let newTask=new Task(req.body)
+
   await newTask.save();
   res.json({
     message:"sucess",
