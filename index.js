@@ -7,7 +7,7 @@ const app=express();
 const database = require("./config/database");
 database.connect();
 //end
-const port=process.env.PORT ||3001
+const port=process.env.PORT 
 
 const routeAPI=require('./routes/client/index.route')
 
